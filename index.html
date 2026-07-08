@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenState — Premium Mental Wellness Portal</title>
+    <style>
+        :root {
+            --primary-deep: #0a1f1a;      
+            --primary-brand: #13392e;     
+            --primary-sage: #4a7065;      
+            --accent-gold: #cfa86b;       
+            --accent-soft-gold: #f4edd9;   
+            --bg-canvas: #fcfbfa;          
+            --bg-card: #ffffff;
+            --text-dark: #1a2924;          
+            --text-muted: #596e67;
+            --success: #267a57;
+            --danger: #b83a3a;
+            --radius-lg: 24px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-subtle: 0 4px 20px rgba(10, 31, 26, 0.03);
+            --shadow-premium: 0 20px 40px rgba(10, 31, 26, 0.06);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        body {
+            background-color: var(--bg-canvas);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background-color: var(--primary-brand);
+            color: white;
+            box-shadow: 0 4px 14px rgba(19, 57, 46, 0.2);
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-deep);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(19, 57, 46, 0.3);
+        }
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary-brand);
+            border: 1px solid rgba(19, 57, 46, 0.15);
+        }
+        .btn-secondary:hover {
+            background-color: var(--accent-soft-gold);
+            border-color: var(--accent-gold);
+        }
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 8%;
+            background: rgba(252, 251, 250, 0.85);
+            backdrop-filter: blur(16px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(19, 57, 46, 0.04);
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary-brand);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+        }
+        .logo span { color: var(--accent-gold); font-weight: 300; }
+        .nav-menu {
+            display: flex;
+            gap: 36px;
+            list-style: none;
+            align-items: center;
+        }
+        .nav-link {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+        .nav-link:hover { color: var(--accent-gold); }
+        .hero-section {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            align-items: center;
+            padding: 80px 8% 100px 8%;
+            gap: 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .hero-text h1 {
+            font-size: 4.2rem;
+            font-weight: 800;
+            color: var(--primary-deep);
+            line-height: 1.15;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+        .hero-text h1 mark { background: none; color: var(--accent-gold); }
+        .hero-text p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+        .hero-cta { display: flex; gap: 16px; }
+        .hero-graphics { display: flex; justify-content: center; align-items: center; }
+        .hero-premium-image {
+            width: 100%;
+            max-width: 440px;
+            height: auto;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-premium);
+            border: 1px solid rgba(207, 168, 107, 0.25);
+            transition: var(--transition);
+        }
+        .hero-premium-image:hover {
+            transform: scale(1.015) translateY(-5px);
+            box-shadow: 0 30px 60px rgba(10, 31, 26, 0.12);
+        }
+        .live-ticker-strip {
+            background-color: var(--primary-deep);
+            color: white;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 30px;
+            border-top: 2px solid var(--accent-gold);
+        }
+        .ticker-stat { text-align: center; }
+        .ticker-number { font-size: 1.8rem; font-weight: 700; color: var(--accent-gold); }
+        .ticker-lbl {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #b5c4c0;
+            margin-top: 4px;
+        }
+        .ecosystem-section {
+            padding: 100px 8% 40px 8%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .section-intro {
+            text-align: center;
+            max-width: 650px;
+            margin: 0 auto 60px auto;
+        }
+        .section-intro h2 { font-size: 2.6rem; color: var(--primary-deep); margin-bottom: 16px; }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+        }
+        .ecosystem-card {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid rgba(19, 57, 46, 0.03);
+            transition: var(--transition);
+        }
+        .ecosystem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-premium);
+            border-color: rgba(207, 168, 107, 0.3);
+        }
+        .icon-box { font-size: 2.5rem; margin-bottom: 24px; }
+        .ecosystem-card h3 { font-size: 1.4rem; color: var(--primary-brand); margin-bottom: 12px; }
+        .ecosystem-card p { color: var(--text-muted); font-size: 1rem; line-height: 1.6; }
+        .telemetry-showcase {
+            padding: 60px 8% 100px 8%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .metrics-display-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .metric-preview-card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-subtle);
+            border-left: 4px solid var(--accent-gold);
+        }
+        .tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: var(--accent-soft-gold);
+            color: var(--primary-brand);
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+        }
+        .metric-preview-card h3 { font-size: 1.15rem; color: var(--primary-deep); margin-bottom: 8px; }
+        .metric-preview-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+        .metric-preview-card code {
+            background: #f0f2f1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo" onclick="window.location.href='index.html'">🧘 Zen<span>State</span></div>
+        <ul class="nav-menu">
+            <li><a href="#" class="nav-link" onclick="showTelemetry(event)">Telemetry Metrics</a></li>
+            <li><button class="btn btn-secondary" onclick="window.location.href='login.html'">Portal Login</button></li>
+            <li><button class="btn btn-primary" onclick="window.location.href='register.html'">Join Platform</button></li>
+        </ul>
+    </header>
+
+    <main id="frontpageView">
+        <div class="hero-section">
+            <div class="hero-text">
+                <h1>The Clinical Path to <mark>Inner Balance</mark>.</h1>
+                <p>ZenState blends verified physiological pacing indicators with structured mental pathways. Managed directly by authenticated Zen Masters and certified Wellness Coaches.</p>
+                <div class="hero-cta">
+                    <button class="btn btn-primary" onclick="window.location.href='register.html'">Initialize Free Profile</button>
+                    <button class="btn btn-secondary" onclick="window.location.href='login.html'">Member Access</button>
+                </div>
+            </div>
+            <div class="hero-graphics">
+                <img src="https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=600&q=80" alt="Zen Wellness Workspace" class="hero-premium-image">
+            </div>
+        </div>
+
+        <div class="live-ticker-strip">
+            <div class="ticker-stat">
+                <div class="ticker-number">42,180+</div>
+                <div class="ticker-lbl">Mindful Practitioners</div>
+            </div>
+            <div class="ticker-stat">
+                <div class="ticker-number">188,400</div>
+                <div class="ticker-lbl">Meditative Hours Tracked</div>
+            </div>
+            <div class="ticker-stat">
+                <div class="ticker-number">99.4%</div>
+                <div class="ticker-lbl">Client Focus Optimization Rate</div>
+            </div>
+        </div>
+
+        <div class="ecosystem-section">
+            <div class="section-intro">
+                <h2>Platform Architecture Features</h2>
+                <p>Explore tools designed from foundational psychology and data engineering principles to restore stability.</p>
+            </div>
+            <div class="cards-grid">
+                <div class="ecosystem-card">
+                    <div class="icon-box">🧠</div>
+                    <h3>Neurological Pacing</h3>
+                    <p>Leverage custom soundscape frequencies engineered explicitly to down-regulate high-beta brain wave activity safely.</p>
+                </div>
+                <div class="ecosystem-card">
+                    <div class="icon-box">🏆</div>
+                    <h3>Role-Based Mentoring</h3>
+                    <p>Receive live feedback loops directly from verified Wellness Coaches who track your custom progression markers.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-showcase" id="telemetrySection">
+            <div class="section-intro">
+                <h2>Live Backend Telemetry Metrics</h2>
+                <p>Our platform maps tracking parameters straight into secure MySQL schemas, validating your health data objects instantly.</p>
+            </div>
+            <div class="metrics-display-grid">
+                <div class="metric-preview-card">
+                    <span class="tag">Field: minutes</span>
+                    <h3>Practice Time Tracker</h3>
+                    <p>Tracks your exact chronological meditation accumulation over time. Instantiated automatically to <code>0</code> upon account setup mapping processes.</p>
+                </div>
+                <div class="metric-preview-card">
+                    <span class="tag">Field: currentstreak</span>
+                    <h3>Consistency Streak logs</h3>
+                    <p>Calculates successive daily platform interactions dynamically. Increments metrics logs automatically to evaluate your behavioral habit transformations.</p>
+                </div>
+                <div class="metric-preview-card">
+                    <span class="tag">Field: role</span>
+                    <h3>RBAC Security Matrix</h3>
+                    <p>Applies granular role validation layers (Practitioner, Coach, or Zen Master) to keep your private biometrics completely clean and secure.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showTelemetry(e) {
+            e.preventDefault();
+            const target = document.getElementById("telemetrySection");
+            if(target) {
+                target.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+        window.addEventListener("load", function () {
+            if (localStorage.getItem("token")) {
+                window.location.href = "dashboard/dashboard.html";
+            }
+        });
+
+        const BASE_URL = "http://localhost:8080";
+
+function showPanel(id) {
+
+    document.querySelectorAll(".panel").forEach(panel => {
+        panel.classList.remove("active");
+    });
+
+    document.getElementById(id).classList.add("active");
+}
+
+function logout() {
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+
+    window.location.href = "../../login.html";
+}
+
+function showResponse(id, content, isError = false) {
+
+    const box = document.getElementById(id);
+
+    box.className = "response-box show " + (isError ? "error" : "success");
+
+    box.innerHTML = content;
+}
+
+function buildUserTable(users) {
+
+    let table = `
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Minutes</th>
+                <th>Current Streak</th>
+            </tr>
+    `;
+
+    users.forEach(user => {
+
+        table += `
+            <tr>
+                <td>${user.id}</td>
+                <td>${user.fullname}</td>
+                <td>${user.email}</td>
+                <td>${user.role}</td>
+                <td>${user.minutes}</td>
+                <td>${user.currentstreak}</td>
+            </tr>
+        `;
+
+    });
+
+    table += "</table>";
+
+    return table;
+}
+
+async function fetchAllUsers() {
+
+    const token = localStorage.getItem("token");
+
+    try {
+
+        const response = await fetch(BASE_URL + "/user/getUser", {
+
+            method: "GET",
+
+            headers: {
+
+                "Authorization": "Bearer " + token
+
+            }
+
+        });
+
+        if (!response.ok) {
+
+            showResponse("res-getall", "Unable to fetch users.", true);
+            return;
+        }
+
+        const users = await response.json();
+
+        showResponse("res-getall", buildUserTable(users));
+
+    }
+
+    catch(error){
+
+        console.log(error);
+
+        showResponse("res-getall", "Server Connection Failed.", true);
+
+    }
+
+}
+    </script>
+</body>
+</html>

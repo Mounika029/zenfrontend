@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenState — Join Platform</title>
+    <style>
+        :root {
+            --primary-deep: #0a1f1a;      
+            --primary-brand: #13392e;     
+            --accent-gold: #cfa86b;       
+            --accent-soft-gold: #f4edd9;   
+            --bg-canvas: #fcfbfa;          
+            --bg-card: #ffffff;
+            --text-dark: #1a2924;          
+            --text-muted: #596e67;
+            --danger: #b83a3a;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --radius-lg: 24px;
+            --shadow-premium: 0 20px 40px rgba(10, 31, 26, 0.06);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        body {
+            background-color: var(--bg-canvas);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 8%;
+            background: rgba(252, 251, 250, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(19, 57, 46, 0.04);
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary-brand);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+        }
+        .logo span { color: var(--accent-gold); font-weight: 300; }
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 20px;
+            background: radial-gradient(circle at top right, var(--accent-soft-gold), transparent 40%);
+        }
+        .auth-card {
+            background: var(--bg-card);
+            padding: 50px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-premium);
+            width: 100%;
+            max-width: 520px;
+            border: 1px solid rgba(19, 57, 46, 0.05);
+        }
+        .auth-card h2 {
+            font-size: 2rem;
+            color: var(--primary-deep);
+            margin-bottom: 8px;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+        .auth-card p {
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 36px;
+            font-size: 0.95rem;
+        }
+        .form-group { margin-bottom: 24px; }
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+            color: var(--primary-brand);
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #e5e8e7;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            color: var(--text-dark);
+            background-color: #faf9f8;
+            transition: var(--transition);
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(207, 168, 107, 0.15);
+        }
+        .error-message {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 6px;
+            display: none;
+            font-weight: 500;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            width: 100%;
+        }
+        .btn-primary {
+            background-color: var(--primary-brand);
+            color: white;
+            box-shadow: 0 4px 14px rgba(19, 57, 46, 0.2);
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-deep);
+            transform: translateY(-2px);
+        }
+        .auth-redirect-text {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .auth-redirect-text span {
+            color: var(--accent-gold);
+            font-weight: 600;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo" onclick="window.location.href='index.html'">🧘 Zen<span>State</span></div>
+    </header>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2>🧘‍♂️ Join ZenState</h2>
+            <p>Configure your mental focus profiling variables below</p>
+            <form id="backendRegisterForm" onsubmit="triggerMockRegister(event)">
+                <div class="form-group">
+                    <label for="regFullname">Full Name</label>
+                    <input type="text" id="regFullname" placeholder="Enter Your Name" required minlength="3" maxlength="20">
+                    <div class="error-message" id="fullnameError">User Name must have only 3-20 characters</div>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email Address</label>
+                    <input type="email" id="regEmail" placeholder="xyz@gmail.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" placeholder="••••••••" required>
+                </div>
+                <div class="form-group">
+                    <label for="regRole">Platform Access Role</label>
+                    <select id="regRole">
+                        <option value="PRACTITIONER">PRACTITIONER</option>
+                        <option value="WELLNESS_COACH">WELLNESS_COACH</option>
+                        <option value="ZEN_MASTER">ZEN_MASTER</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+                <p class="auth-redirect-text">Already have an account? <span onclick="window.location.href='login.html'">Login here</span></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const BASE_URL = "http://localhost:8080";
+
+        async function triggerMockRegister(e) {
+            e.preventDefault();
+            const fn = document.getElementById("regFullname").value.trim();
+            const email = document.getElementById("regEmail").value.trim();
+            const password = document.getElementById("regPassword").value;
+            const role = document.getElementById("regRole").value;
+            const nameError = document.getElementById("fullnameError");
+
+            if (fn.length < 3 || fn.length > 20) {
+                nameError.style.display = "block";
+                return;
+            } else {
+                nameError.style.display = "none";
+            }
+
+            const user = { fullname: fn, email: email, password: password, role: role };
+
+            try {
+                const response = await fetch(`${BASE_URL}/user/register`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(user)
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    alert("Registration Successful!");
+                    localStorage.setItem("registeredEmail", email);
+                    window.location.href = "login.html";
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                alert("Cannot connect to Spring Boot Server.");
+                console.log(error);
+            }
+        }
+    </script>
+</body>
+</html>

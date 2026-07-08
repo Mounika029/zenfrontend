@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenState - Wellness Plans</title>
+    <style>
+        :root {
+            --primary-brand: #13392e;
+            --primary-deep: #0a1f1a;
+            --accent-gold: #cfa86b;
+            --accent-soft: #f4edd9;
+            --bg: #fcfbfa;
+            --card: #ffffff;
+            --text: #1a2924;
+            --muted: #596e67;
+            --success: #267a57;
+            --danger: #b83a3a;
+            --radius: 10px;
+            --radius-md: 6px;
+            --shadow-subtle: 0 4px 20px rgba(10, 31, 26, 0.04);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ================= NAVBAR ================= */
+        .navbar {
+            background: var(--primary-brand);
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .logo span {
+            color: var(--accent-gold);
+        }
+
+        .right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .back-btn,
+        .logout-btn {
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .back-btn {
+            background: white;
+            color: var(--primary-brand);
+        }
+
+        .back-btn:hover {
+            background: var(--accent-soft);
+        }
+
+        .logout-btn {
+            background: #f0a640;
+            color: white;
+        }
+
+        .logout-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* ================= CONTAINER ================= */
+        .container {
+            width: 90%;
+            margin: 35px auto;
+            max-width: 1200px;
+            flex-grow: 1;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title h1 {
+            color: var(--primary-brand);
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+
+        .title p {
+            color: var(--muted);
+        }
+
+        /* ================= CONTROLS ROW ================= */
+        .controls-card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(19, 57, 46, 0.05);
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: var(--primary-brand);
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-deep);
+            transform: translateY(-1px);
+        }
+
+        .action-btn.refresh-btn {
+            background: transparent;
+            color: var(--primary-brand);
+            border: 1px solid var(--primary-brand);
+        }
+
+        .action-btn.refresh-btn:hover {
+            background: var(--accent-soft);
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 11px 15px 11px 35px;
+            border: 1px solid #ccc;
+            border-radius: var(--radius-md);
+            outline: none;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(207, 168, 107, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+        }
+
+        /* ================= GET BY ID LOOKUP ================= */
+        .lookup-card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.04);
+            margin-bottom: 25px;
+            border: 1px solid rgba(19, 57, 46, 0.05);
+        }
+
+        .lookup-card h3 {
+            color: var(--primary-brand);
+            margin-bottom: 15px;
+            font-size: 1.15rem;
+        }
+
+        .lookup-form {
+            display: flex;
+            gap: 10px;
+            max-width: 450px;
+        }
+
+        .lookup-input {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: var(--radius-md);
+            outline: none;
+        }
+
+        .lookup-input:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .lookup-result {
+            margin-top: 15px;
+            display: none;
+        }
+
+        .detail-card {
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-gold);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .detail-item {
+            font-size: 0.9rem;
+        }
+
+        .detail-item strong {
+            color: var(--primary-brand);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        /* ================= TABLE ================= */
+        .table-card {
+            background: var(--card);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.04);
+            overflow: hidden;
+            border: 1px solid rgba(19, 57, 46, 0.05);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: var(--primary-brand);
+            color: white;
+            padding: 14px 16px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: #fdfdfc;
+        }
+
+        /* ================= ACTIONS ================= */
+        .row-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .btn-icon.view {
+            color: var(--success);
+        }
+
+        .btn-icon.view:hover {
+            background: #eef7f2;
+        }
+
+        .btn-icon.edit {
+            color: var(--accent-gold);
+        }
+
+        .btn-icon.edit:hover {
+            background: #fdfaf2;
+        }
+
+        .btn-icon.delete {
+            color: var(--danger);
+        }
+
+        .btn-icon.delete:hover {
+            background: #fdf2f2;
+        }
+
+        /* ================= MODALS ================= */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--card);
+            padding: 30px;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(10,31,26,0.15);
+            border: 1px solid rgba(19, 57, 46, 0.08);
+            position: relative;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--muted);
+            font-weight: bold;
+            border: none;
+            background: none;
+        }
+
+        .close-btn:hover {
+            color: var(--danger);
+        }
+
+        .modal-title {
+            color: var(--primary-brand);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: var(--radius-md);
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .modal-btn {
+            padding: 10px 18px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-btn.cancel {
+            background: #eee;
+            color: var(--text);
+        }
+
+        .modal-btn.cancel:hover {
+            background: #e2e2e2;
+        }
+
+        .modal-btn.submit {
+            background: var(--success);
+            color: white;
+        }
+
+        .modal-btn.submit:hover {
+            opacity: 0.9;
+        }
+
+        /* ================= TOAST NOTIFICATION ================= */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 2000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background-color: var(--success);
+        }
+
+        .toast.error {
+            background-color: var(--danger);
+        }
+
+        /* ================= FOOTER ================= */
+        footer {
+            margin-top: auto;
+            background-color: var(--primary-deep);
+            color: #8fa39e;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo" onclick="window.location.href='../dashboard/dashboard.html'">
+            🧘 Zen<span>State</span>
+        </div>
+        <div class="right">
+            <span id="nav-email" style="color: white; font-weight: 500; font-size: 0.95rem; margin-right: 10px;">Logged in as: —</span>
+            <button class="back-btn" onclick="window.location.href='../dashboard/dashboard.html'">← Dashboard</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="title">
+            <h1>Wellness Plans</h1>
+            <p>Design personalized physiological targets, student pacing pipelines, and system benchmarks.</p>
+        </div>
+
+        <!-- Action Row -->
+        <div class="controls-card">
+            <div class="btn-row">
+                <button class="action-btn" id="addNewBtn" onclick="openAddModal()">+ Design New Plan</button>
+            </div>
+        </div>
+
+        <!-- Get By ID Form -->
+        <div class="lookup-card">
+            <h3>Get Wellness Plan By ID</h3>
+            <div class="lookup-form">
+                <input type="number" class="lookup-input" id="searchId" placeholder="Enter Plan ID (e.g. 1)">
+                <button class="action-btn" onclick="getPlanById()">Search</button>
+                <button class="action-btn" id="showPlansBtn" onclick="toggleShowPlans()" style="background-color: var(--primary-brand); margin-left: 10px;">Show Plans</button>
+            </div>
+        </div>
+
+        <!-- Main Plans Table -->
+        <div class="table-card" style="display: none;">
+            <div class="table-wrapper">
+                <table id="plansTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Plan Name</th>
+                            <th>Target Goal</th>
+                            <th>Capacity</th>
+                            <th>Current Enrollments</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="plansTableBody">
+                        <!-- Dynamic rows -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD/EDIT MODAL -->
+    <div class="modal" id="planModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <div class="modal-title" id="modalTitle">Add New Plan</div>
+            <form id="planForm" onsubmit="handleFormSubmit(event)">
+                
+                <div class="form-group" id="idFieldGroup">
+                    <label for="planId">Plan ID</label>
+                    <input type="number" id="planId" min="1" max="100" placeholder="Enter ID (Max 100)" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="planname">Plan Name</label>
+                    <input type="text" id="planname" placeholder="Enter plan name" minlength="3" maxlength="100" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="targetGoal">Target Goal</label>
+                    <input type="text" id="targetGoal" placeholder="e.g. Reduce Beta spikes, Stress relief" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="capacity">Total Capacity</label>
+                    <input type="number" id="capacity" min="1" placeholder="e.g. 50" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="currentEnrollments">Current Enrollments</label>
+                    <input type="number" id="currentEnrollments" min="0" value="0" required>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="modal-btn submit" id="modalSubmitBtn">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- VIEW MODAL (DETAILS READ-ONLY) -->
+    <div class="modal" id="viewModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeViewModal()">×</button>
+            <div class="modal-title">Plan Details</div>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 15px;" id="viewDetailsContent">
+                <!-- Filled dynamically -->
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn cancel" onclick="closeViewModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE CONFIRMATION MODAL -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-title">Confirm Delete</div>
+            <p style="margin-bottom: 20px;">Are you sure you want to delete this record?</p>
+            <input type="hidden" id="deletePlanId">
+            <div class="modal-actions">
+                <button type="button" class="modal-btn cancel" onclick="closeDeleteModal()">Cancel</button>
+                <button type="button" class="modal-btn submit" style="background: var(--danger);" onclick="deletePlan()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Alerts -->
+    <div class="toast" id="toastBox">
+        <span id="toastIcon"></span>
+        <span id="toastMessage"></span>
+    </div>
+
+    <footer>
+        © 2026 ZenState System. All rights reserved.
+    </footer>
+
+    <script>
+        const BASE_URL = "http://localhost:8080";
+        let loggedUserRole = "";
+        let plansList = [];
+        let isEditMode = false;
+
+        window.onload = initializePlanPage;
+
+        async function initializePlanPage() {
+            const token = localStorage.getItem("token");
+            const email = localStorage.getItem("email");
+
+            if (!token || !email) {
+                window.location.href = "../../login.html";
+                return;
+            }
+
+            document.getElementById("nav-email").innerText = "Logged in as : " + email;
+
+            try {
+                // Fetch logged user role
+                const response = await fetch(`${BASE_URL}/user/email/${email}`, {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+
+                if (!response.ok) {
+                    logout();
+                    return;
+                }
+
+                const loggedUser = await response.json();
+                loggedUserRole = loggedUser.role;
+                configureRoleAccess(loggedUserRole);
+            } catch (err) {
+                console.error(err);
+                logout();
+            }
+        }
+
+        function configureRoleAccess(role) {
+            // Write access control
+            // ZEN_MASTER & WELLNESS_COACH can Create/Edit
+            // Only ZEN_MASTER can Delete
+            if (role === "PRACTITIONER") {
+                const controlsCard = document.querySelector(".controls-card");
+                if (controlsCard) controlsCard.style.display = "none";
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem("token");
+            localStorage.removeItem("email");
+            window.location.href = "../../login.html";
+        }
+
+        function authHeader() {
+            return {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            };
+        }
+
+        // Show toast notification
+        function showNotification(message, isSuccess = true) {
+            const toast = document.getElementById("toastBox");
+            const icon = document.getElementById("toastIcon");
+            const msg = document.getElementById("toastMessage");
+
+            toast.className = "toast show " + (isSuccess ? "success" : "error");
+            icon.innerText = isSuccess ? "✅" : "❌";
+            msg.innerText = message;
+
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+
+        // ================= GET ALL =================
+        async function getAllPlans() {
+            try {
+                const response = await fetch(`${BASE_URL}/plan/getData`, {
+                    headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+                });
+
+                if (response.status === 403) {
+                    showNotification("You do not have permission to perform this action.", false);
+                    return;
+                }
+
+                if (!response.ok) {
+                    showNotification("Failed to fetch wellness plans.", false);
+                    return;
+                }
+
+                plansList = await response.json();
+                renderTable(plansList);
+            } catch (err) {
+                console.error(err);
+                showNotification("Server connection error.", false);
+            }
+        }
+
+        function renderTable(plans) {
+            const tbody = document.getElementById("plansTableBody");
+            tbody.innerHTML = "";
+
+            if (plans.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--muted);">No wellness plans found</td></tr>`;
+                return;
+            }
+
+            plans.forEach(p => {
+                let editBtn = "";
+                let deleteBtn = "";
+
+                if (loggedUserRole === "ZEN_MASTER" || loggedUserRole === "WELLNESS_COACH") {
+                    editBtn = `<button class="btn-icon edit" title="Edit" onclick="openEditModal(${p.id})">✏️</button>`;
+                }
+                if (loggedUserRole === "ZEN_MASTER") {
+                    deleteBtn = `<button class="btn-icon delete" title="Delete" onclick="openDeleteModal(${p.id})">🗑️</button>`;
+                }
+
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${p.id}</td>
+                    <td><strong>${p.planname}</strong></td>
+                    <td>${p.targetGoal}</td>
+                    <td>${p.capacity}</td>
+                    <td>${p.currentEnrollments} / ${p.capacity}</td>
+                    <td>
+                        <div class="row-actions">
+                            <button class="btn-icon view" title="View" onclick="openViewModal(${p.id})">👁️</button>
+                            ${editBtn}
+                            ${deleteBtn}
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ================= GET BY ID =================
+        async function getPlanById() {
+            const idInput = document.getElementById("searchId").value.trim();
+
+            if (!idInput) {
+                getAllPlans();
+                const tableCard = document.querySelector(".table-card");
+                if (tableCard) tableCard.style.display = "block";
+                const btn = document.getElementById("showPlansBtn");
+                if (btn) btn.innerText = "Hide Plans";
+                return;
+            }
+
+            try {
+                const response = await fetch(`${BASE_URL}/plan/getData/${idInput}`, {
+                    headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+                });
+
+                if (response.status === 403) {
+                    showNotification("You do not have permission to perform this action.", false);
+                    return;
+                }
+
+                if (!response.ok) {
+                    showNotification("Wellness plan not found.", false);
+                    return;
+                }
+
+                const p = await response.json();
+                
+                const tableCard = document.querySelector(".table-card");
+                if (tableCard) tableCard.style.display = "block";
+                const btn = document.getElementById("showPlansBtn");
+                if (btn) btn.innerText = "Hide Plans";
+
+                renderTable([p]);
+            } catch (err) {
+                console.error(err);
+                showNotification("Server error looking up plan.", false);
+            }
+        }
+
+        function toggleShowPlans() {
+            const tableCard = document.querySelector(".table-card");
+            const btn = document.getElementById("showPlansBtn");
+            if (tableCard.style.display === "none" || !tableCard.style.display) {
+                tableCard.style.display = "block";
+                btn.innerText = "Hide Plans";
+                getAllPlans();
+            } else {
+                tableCard.style.display = "none";
+                btn.innerText = "Show Plans";
+            }
+        }
+
+        // ================= MODAL OPERATIONS =================
+        function openAddModal() {
+            isEditMode = false;
+            document.getElementById("modalTitle").innerText = "Create New Plan";
+            document.getElementById("planId").value = "";
+            document.getElementById("idFieldGroup").style.display = "block";
+            document.getElementById("planId").required = true;
+            document.getElementById("planname").value = "";
+            document.getElementById("targetGoal").value = "";
+            document.getElementById("capacity").value = "";
+            document.getElementById("currentEnrollments").value = "0";
+
+            document.getElementById("planModal").classList.add("show");
+        }
+
+        async function openEditModal(id) {
+            try {
+                const response = await fetch(`${BASE_URL}/plan/getData/${id}`, {
+                    headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+                });
+
+                if (response.status === 403) {
+                    showNotification("You do not have permission to perform this action.", false);
+                    return;
+                }
+
+                if (!response.ok) {
+                    showNotification("Could not retrieve plan info.", false);
+                    return;
+                }
+
+                const p = await response.json();
+                isEditMode = true;
+
+                document.getElementById("modalTitle").innerText = "Edit Plan";
+                document.getElementById("planId").value = p.id;
+                document.getElementById("idFieldGroup").style.display = "none"; // Hide ID change field on edit
+                document.getElementById("planId").required = false; 
+                document.getElementById("planname").value = p.planname;
+                document.getElementById("targetGoal").value = p.targetGoal;
+                document.getElementById("capacity").value = p.capacity;
+                document.getElementById("currentEnrollments").value = p.currentEnrollments;
+
+                document.getElementById("planModal").classList.add("show");
+            } catch (err) {
+                console.error(err);
+                showNotification("Error connecting to server.", false);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById("planModal").classList.remove("show");
+        }
+
+        async function openViewModal(id) {
+            try {
+                const response = await fetch(`${BASE_URL}/plan/getData/${id}`, {
+                    headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+                });
+
+                if (response.status === 403) {
+                    showNotification("You do not have permission to perform this action.", false);
+                    return;
+                }
+
+                if (!response.ok) {
+                    showNotification("Plan not found.", false);
+                    return;
+                }
+
+                const p = await response.json();
+                const content = document.getElementById("viewDetailsContent");
+                content.innerHTML = `
+                    <div><strong>ID:</strong> ${p.id}</div>
+                    <div><strong>Plan Name:</strong> ${p.planname}</div>
+                    <div><strong>Target Goal:</strong> ${p.targetGoal}</div>
+                    <div><strong>Capacity:</strong> ${p.capacity} participants</div>
+                    <div><strong>Current Enrollments:</strong> ${p.currentEnrollments} / ${p.capacity} registered</div>
+                `;
+                document.getElementById("viewModal").classList.add("show");
+            } catch (err) {
+                console.error(err);
+                showNotification("Server error.", false);
+            }
+        }
+
+        function closeViewModal() {
+            document.getElementById("viewModal").classList.remove("show");
+        }
+
+        function openDeleteModal(id) {
+            document.getElementById("deletePlanId").value = id;
+            document.getElementById("deleteModal").classList.add("show");
+        }
+
+        function closeDeleteModal() {
+            document.getElementById("deleteModal").classList.remove("show");
+        }
+
+        // ================= FORM SUBMISSION =================
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const planId = parseInt(document.getElementById("planId").value);
+            const planname = document.getElementById("planname").value.trim();
+            const targetGoal = document.getElementById("targetGoal").value.trim();
+            const capacity = parseInt(document.getElementById("capacity").value);
+            const currentEnrollments = parseInt(document.getElementById("currentEnrollments").value);
+
+            // Validate constraints
+            if (!isEditMode && (isNaN(planId) || planId < 1 || planId > 100)) {
+                showNotification("ID must be between 1 and 100.", false);
+                return;
+            }
+            if (planname.length < 3 || planname.length > 100) {
+                showNotification("Plan Name must be 3-100 characters.", false);
+                return;
+            }
+            if (currentEnrollments > capacity) {
+                showNotification("Current enrollments cannot exceed total capacity.", false);
+                return;
+            }
+
+            const payload = {
+                id: planId,
+                planname: planname,
+                targetGoal: targetGoal,
+                capacity: capacity,
+                currentEnrollments: currentEnrollments
+            };
+
+            try {
+                if (isEditMode) {
+                    // Update PUT
+                    const response = await fetch(`${BASE_URL}/plan/put/${planId}`, {
+                        method: "PUT",
+                        headers: authHeader(),
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.status === 403) {
+                        showNotification("You do not have permission to perform this action.", false);
+                        return;
+                    }
+
+                    if (response.ok) {
+                        showNotification("Wellness Plan updated successfully!");
+                        closeModal();
+                        getAllPlans();
+                    } else {
+                        showNotification("Failed to update wellness plan.", false);
+                    }
+                } else {
+                    // Create POST
+                    // Check if ID is taken
+                    const checkResponse = await fetch(`${BASE_URL}/plan/getData/${planId}`, {
+                        headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+                    });
+
+                    if (checkResponse.status === 403) {
+                        showNotification("You do not have permission to perform this action.", false);
+                        return;
+                    }
+
+                    if (checkResponse.ok) {
+                        showNotification("Plan with this ID already exists.", false);
+                        return;
+                    }
+
+                    const response = await fetch(`${BASE_URL}/plan/postData`, {
+                        method: "POST",
+                        headers: authHeader(),
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.status === 403) {
+                        showNotification("You do not have permission to perform this action.", false);
+                        return;
+                    }
+
+                    if (response.ok) {
+                        showNotification("Wellness Plan created successfully!");
+                        closeModal();
+                        getAllPlans();
+                    } else {
+                        showNotification("Failed to create wellness plan.", false);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                showNotification("Server error during save.", false);
+            }
+        }
+
+        // ================= DELETE =================
+        async function deletePlan() {
+            const id = document.getElementById("deletePlanId").value;
+
+            try {
+                const response = await fetch(`${BASE_URL}/plan/delete/${id}`, {
+                    method: "DELETE",
+                    headers: authHeader()
+                });
+
+                if (response.status === 403) {
+                    showNotification("You do not have permission to perform this action.", false);
+                    closeDeleteModal();
+                    return;
+                }
+
+                if (response.ok) {
+                    showNotification("Wellness Plan deleted successfully!");
+                    closeDeleteModal();
+                    getAllPlans();
+                } else {
+                    showNotification("Failed to delete wellness plan.", false);
+                }
+            } catch (err) {
+                console.error(err);
+                showNotification("Server connection error.", false);
+            }
+        }
+    </script>
+</body>
+</html>

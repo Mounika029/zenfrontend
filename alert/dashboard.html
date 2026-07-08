@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Alert Center</title>
+    <style>
+        :root { --primary-brand: #13392e; --primary-deep: #0a1f1a; --accent-gold: #cfa86b; --bg-canvas: #fcfbfa; --text-dark: #1a2924; --text-muted: #596e67; --danger: #b83a3a; --radius-lg: 16px; --radius-md: 8px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
+        body { background-color: var(--bg-canvas); color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; }
+        .main-header { background-color: var(--primary-brand); color: white; padding: 16px 8%; display: flex; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 800; cursor: pointer; }
+        .logo span { color: var(--accent-gold); font-weight: 400; }
+        .dash-viewport { flex-grow: 1; padding: 60px 8%; max-width: 1400px; width: 100%; margin: 0 auto; }
+        .btn-back { background: none; border: 1px solid var(--primary-brand); color: var(--primary-brand); padding: 8px 16px; font-weight: 600; border-radius: var(--radius-md); cursor: pointer; margin-bottom: 24px; }
+        .workspace-portal { display: flex; background: white; border-radius: var(--radius-lg); box-shadow: 0 15px 35px rgba(0,0,0,0.06); border: 1px solid rgba(19, 57, 46, 0.05); overflow: hidden; min-height: 480px; }
+        .workspace-visual { flex: 1; min-height: 400px; background-size: cover; background-position: center; }
+        .workspace-details { flex: 1.2; padding: 50px; display: flex; flex-direction: column; justify-content: center; }
+        .workspace-title { font-size: 2.2rem; font-weight: 800; color: var(--primary-deep); margin-bottom: 12px; }
+        .workspace-desc { font-size: 1.1rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 30px; }
+        .btn-launch-crud { background: var(--danger); color: white; padding: 14px 28px; font-weight: 700; border-radius: var(--radius-md); border: none; cursor: pointer; font-size: 1rem; }
+    </style>
+</head>
+<body>
+    <header class="main-header"><div class="logo" onclick="window.location.href='../dashboard/dashboard.html'">🧘 Zen<span>State</span></div></header>
+    <main class="dash-viewport">
+        <button class="btn-back" onclick="window.location.href='../dashboard/dashboard.html'">← Back to Hub</button>
+        <div class="workspace-portal">
+            <div class="workspace-visual" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="workspace-details">
+                <h2 class="workspace-title" style="color: var(--danger);">System Alerts</h2>
+                <p class="workspace-desc">Audit real-time role verification errors, read schema data conflicts, and inspect warning dispatches.</p>
+                <div class="workspace-actions">
+                    <button class="btn-launch-crud" onclick="window.location.href='./alert.html'">Manage System Alerts 🚀</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        window.addEventListener("load", () => {
+            if (!localStorage.getItem("token") || !localStorage.getItem("email")) window.location.href = "../login.html";
+        });
+    </script>
+</body>
+</html>
