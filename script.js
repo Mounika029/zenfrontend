@@ -1,7 +1,7 @@
 let activeSessionUser = null;
 
 // Global API Endpoint Base URL
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "https://zenbackend-kj42.onrender.com";
 
 function switchPortalView(viewElementId) {
     document.querySelectorAll('.view-section').forEach(b => b.classList.remove('active'));
